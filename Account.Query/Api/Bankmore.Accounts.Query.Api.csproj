@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MediatR" Version="13.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.19" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.19" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\BankMore.Shared\BankMore.Shared.csproj" />
+      <ProjectReference Include="..\Application\Bankmore.Accounts.Query.Application.csproj" />
+      <ProjectReference Include="..\Infra\Bankmore.Accounts.Query.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

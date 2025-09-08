@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.19" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.19" />
+      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Application\Bankmore.Accounts.Query.Application.csproj" />
+      <ProjectReference Include="..\Bankmore.Accounts.Query.Application\Bankmore.Accounts.Query.Application.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,71 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: bankmore-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Bankmore
+      MYSQL_USER: Bankmore
+      MYSQL_PASSWORD: Bankmore
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "Bankmore", "-pBankmore"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [ bankmore-net ]
+
+  accounts-command-api:
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+    container_name: bankmore-accounts-command
+    environment:
+      ASPNETCORE_URLS: http://+:8081
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__CommandDb: "Server=db;Port=3306;Database=Bankmore;User=Bankmore;Password=Bankmore;AllowPublicKeyRetrieval=True;SslMode=None"
+    ports:
+      - "8081:8081"   # <-- alinhei com a porta interna 8081
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [ bankmore-net ]
+
+  accounts-query-api:
+    build:
+      context: .
+      dockerfile: Bankmore.Accounts.Query.Api/Dockerfile
+    container_name: bankmore-accounts-query
+    environment:
+      ASPNETCORE_URLS: http://+:8082
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__QueryDb: "Server=db;Port=3306;Database=Bankmore;User=Bankmore;Password=Bankmore;AllowPublicKeyRetrieval=True;SslMode=None"
+    ports:
+      - "8082:8082"   # <-- alinhei com a porta interna 8082
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [ bankmore-net ]
+
+  transfers-command-api:
+    build:
+      context: .
+      dockerfile: Transfers/Api/Dockerfile
+    container_name: bankmore-transfers-command
+    environment:
+      ASPNETCORE_URLS: http://+:8083
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__QueryDb: "Server=db;Port=3306;Database=Bankmore;User=Bankmore;Password=Bankmore;AllowPublicKeyRetrieval=True;SslMode=None"
+    ports:
+      - "8083:8083"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [ bankmore-net ]
+
+networks:
+  bankmore-net:
+    driver: bridge
